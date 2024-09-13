@@ -76,7 +76,7 @@ func (s *Service) RateLimit(userID string, limit int) bool {
 func (s *Service) SetUserConfig(ctx context.Context, params SetUserConfigParams) error {
 	key := "userID:" + params.UserID
 	if params.RateLimit == 0 {
-		params.RateLimit = config.UserRateDefault()
+		params.RateLimit = config.UsersRateDefault()
 	}
 	err := s.redisClient.HSet(ctx, key, REDIS_RATE_LIMIT_FIELD, params.RateLimit).Err()
 	if err != nil {

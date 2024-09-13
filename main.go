@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -22,13 +23,14 @@ func main() {
 	if err != nil {
 		log.Fatal("failed to initialize logger", err)
 	}
-
+	
 	//loading config
 	err = config.Load()
 	if err != nil {
 		logger.Fatal("failed to load config", zap.Error(err))
 	}
 	defer logger.Sync()
+	fmt.Println(config.UsersRateLimit())
 	//initiating redis client
 	redisClient, err := client.NewRedisClient()
 	if err != nil {

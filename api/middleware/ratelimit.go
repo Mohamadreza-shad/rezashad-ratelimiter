@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/Mohamadreza-shad/ratelimiter/config"
@@ -12,7 +13,8 @@ import (
 func RateLimitMiddleware(s *ratelimiter.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userID := c.Query("userID")
-		if !s.RateLimit(userID, config.UserRateLimit()) {
+		fmt.Println("limit from config: ", config.UsersRateLimit())
+		if !s.RateLimit(userID, config.UsersRateLimit()) {
 			c.AbortWithStatusJSON(
 				http.StatusTooManyRequests,
 				gin.H{

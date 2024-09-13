@@ -1,20 +1,24 @@
 package config
 
-type UserRate struct {
+type Users struct {
+	Rate Rate
+}
+
+type Rate struct {
 	Limit   int
 	Default int
 }
 
-func UserRateLimit() int {
-	if cfg.UserRate.Limit == 0 {
-		return 3
+func UsersRateLimit() int {
+	if cfg.Users.Rate.Limit == 0 && Env() == EnvTest{
+		return 198
 	}
-	return cfg.UserRate.Limit
+	return cfg.Users.Rate.Limit
 }
 
-func UserRateDefault() int {
-	if cfg.UserRate.Default == 0 {
+func UsersRateDefault() int {
+	if cfg.Users.Rate.Default == 0 {
 		return 1
 	}
-	return cfg.UserRate.Default
+	return cfg.Users.Rate.Default
 }

@@ -15,9 +15,9 @@ var loggerService *logger.Logger
 var redisClient redis.UniversalClient
 
 func TestMain(m *testing.M) {
-	config.Load()
-	if config.Env() != config.EnvTest {
-		config.SetTestEnvVariable()
+	err := config.Load()
+	if err != nil {
+		panic(err)
 	}
 	exitCode := m.Run()
 	os.Exit(exitCode)

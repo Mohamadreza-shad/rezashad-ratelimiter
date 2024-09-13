@@ -49,7 +49,7 @@ func TestRateLimiter_1LimitForManualAnd3ForLimit_OneReqShouldGet429(t *testing.T
 	)
 	assert.Nil(err)
 
-	concurrentRequests := 5
+	concurrentRequests :=200 
 	ch := make(chan int, concurrentRequests)
 	var wg sync.WaitGroup
 	wg.Add(concurrentRequests)
@@ -107,7 +107,7 @@ func Test_5ConcurrentReques_ThenWaitForWindowToClose_ThenCallAgain_WeShouldGet20
 	)
 	assert.Nil(err)
 
-	concurrentRequests := 5
+	concurrentRequests := 200
 	ch := make(chan int, concurrentRequests)
 	var wg sync.WaitGroup
 	wg.Add(concurrentRequests)

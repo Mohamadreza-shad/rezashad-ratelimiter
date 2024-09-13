@@ -17,13 +17,11 @@ const (
 var cfg *Config = &Config{}
 
 type Config struct {
-	Environment string //related to sentry
-	Env         string
-	Redis       RedisConfigs
-	Hostname    string
-	UserRate    UserRate
-	Window      Window
-	Server      Server
+	Env    string
+	Redis  RedisConfigs
+	Users  Users
+	Window Window
+	Server Server
 }
 
 func Env() string {

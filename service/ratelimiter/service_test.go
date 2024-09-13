@@ -30,6 +30,6 @@ func BenchmarkRateLimit(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		rateLimiterService.RateLimit(userID, config.UserRateLimit())
+		rateLimiterService.RateLimit(userID, config.UsersRateLimit())
 	}
 }
