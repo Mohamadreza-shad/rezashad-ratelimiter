@@ -18,15 +18,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type ResponseFailure struct {
-	Success bool      `json:"success" example:"false"`
-	Error   ErrorCode `json:"error,omitempty" `
-}
-type ErrorCode struct {
-	Code    int    `json:"code" example:"404"`
-	Message string `json:"message" example:"item not find"`
-}
-
 func TestRateLimiter_1LimitForManualAnd3ForLimit_OneReqShouldGet429(t *testing.T) {
 	ctx := context.Background()
 	assert := assert.New(t)
@@ -87,7 +78,7 @@ func TestRateLimiter_1LimitForManualAnd3ForLimit_OneReqShouldGet429(t *testing.T
 	fmt.Println(count)
 }
 
-func Test5ReqWaitForWindowTimeThencallAgain(t *testing.T) {
+func Test_5ConcurrentReques_ThenWaitForWindowToClose_ThenCallAgain_WeShouldGet200InsteadOf429(t *testing.T) {
 	ctx := context.Background()
 	assert := assert.New(t)
 	logger := getLogger()
