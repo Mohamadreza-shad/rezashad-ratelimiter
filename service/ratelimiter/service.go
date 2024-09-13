@@ -3,8 +3,6 @@ package ratelimiter
 import (
 	"context"
 	"errors"
-	"fmt"
-	"strconv"
 	"time"
 	"web-metric/config"
 	"web-metric/logger"
@@ -28,45 +26,46 @@ type SetUserConfigParams struct {
 	RateLimit int    `json:"rateLimit"`
 }
 
-// Please go to README.md file for furthur description
 func (s *Service) RateLimit(userID string, limit int) bool {
 	ctx := context.Background()
-	currentTime := time.Now().UnixMilli()
-	windowStart := currentTime - s.windowSize.Milliseconds()
 
-	// Define the Redis key for this user
-	key := "user:" + userID + "limit"
+	// Define the Redis key for this user's rate limit
+	key := "user:" + userID + ":limit"
 
-	// Remove old requests that are outside the sliding window
-	s.redisClient.ZRemRangeByScore(ctx, key, "0", strconv.FormatInt(windowStart, 10))
-
-	// Count the requests within the current window
-	count, err := s.redisClient.ZCount(ctx, key, strconv.FormatInt(windowStart, 10), strconv.FormatInt(currentTime, 10)).Result()
-	if err != nil {
-		return false
-	}
-
-	//check if user has more limit in his/her config
+	// Fetch the user-specific limit from Redis (optional)
 	userLimit, err := s.redisClient.HGet(ctx, "userID:"+userID, REDIS_RATE_LIMIT_FIELD).Int()
 	if err == redis.Nil {
-		s.logger.Log(zapcore.ErrorLevel, "manual rate-limiter has not been set for user")
-		err := s.redisClient.HSet(ctx, "userID:"+userID, REDIS_RATE_LIMIT_FIELD, config.UserRateDefault()).Err()
-		if err != nil {
-			s.logger.Log(zapcore.ErrorLevel, "failed to set user config")
-		}
-	}
-	fmt.Println("count: ", count, "limit: ", int(limit+userLimit))
-	// Deny request as the user has exceeded the limit
-	if int(count) >= int(limit+userLimit) {
+		userLimit = 1 // Default limit if not set for the user
+	} else if err != nil {
+		s.logger.Log(zapcore.ErrorLevel, "failed to get user limit. err: "+err.Error())
 		return false
 	}
 
-	// Otherwise, allow the request and add the current timestamp to Redis
-	s.redisClient.ZAdd(ctx, key, redis.Z{Score: float64(currentTime), Member: currentTime})
+	// Total limit (default + user-specific limit)
+	totalLimit := limit + userLimit
 
-	// Optionally set a TTL for the sorted set to auto-expire
-	s.redisClient.Expire(ctx, key, s.windowSize)
+	// Increment the count for this user in Redis atomically
+	count, err := s.redisClient.Incr(ctx, key).Result()
+	if err != nil {
+		s.logger.Log(zapcore.ErrorLevel, "failed to increment rate limit counter. err: "+err.Error())
+		return false
+	}
 
+	// If it's the first request, set an expiration (TTL) on the key
+	if count == 1 {
+		err := s.redisClient.Expire(ctx, key, s.windowSize).Err()
+		if err != nil {
+			s.logger.Log(zapcore.ErrorLevel, "failed to set expiration on rate limit key. err: "+err.Error())
+			return false
+		}
+	}
+
+	// Deny the request if the count exceeds the limit
+	if int(count) > totalLimit {
+		return false
+	}
+
+	// Allow the request
 	return true
 }
 

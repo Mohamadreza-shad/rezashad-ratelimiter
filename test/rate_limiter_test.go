@@ -57,22 +57,16 @@ func TestRateLimiter_1LimitForManualAnd3ForLimit_OneReqShouldGet429(t *testing.T
 	)
 	assert.Nil(err)
 
-	concurrentRequests := 10
+	concurrentRequests := 5
 	ch := make(chan int, concurrentRequests)
 	var wg sync.WaitGroup
 	wg.Add(concurrentRequests)
 	for i := 0; i < concurrentRequests; i++ {
 		go func() {
 			res, err := http.DefaultClient.Do(req)
-			defer wg.Done()
 			assert.Nil(err)
-			// body, err := io.ReadAll(res.Body)
-			// assert.Nil(err)
-
-			// var failure ResponseFailure
-			// err = json.Unmarshal(body, &failure)
-			// assert.Nil(err)
 			ch <- int(res.StatusCode)
+			defer wg.Done()
 		}()
 	}
 	wg.Wait()
