@@ -54,7 +54,7 @@ func Test_SetUserManualRateLimit_Successful(t *testing.T) {
 	_, err = http.DefaultClient.Do(req)
 	assert.Nil(err)
 
-	key := "userID: 123"
+	key := "userID:123"
 	userManualRatelimiter, err := redisClient.HGet(ctx, key, ratelimiter.REDIS_RATE_LIMIT_FIELD).Int()
 	assert.Nil(err)
 	assert.Equal(userManualRatelimiter, int(5))
