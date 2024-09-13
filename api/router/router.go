@@ -4,10 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"web-metric/api"
-	"web-metric/api/middleware"
-	"web-metric/logger"
-	"web-metric/service/ratelimiter"
+
+	"github.com/Mohamadreza-shad/ratelimiter/api"
+	"github.com/Mohamadreza-shad/ratelimiter/api/middleware"
+	"github.com/Mohamadreza-shad/ratelimiter/logger"
+	"github.com/Mohamadreza-shad/ratelimiter/service/ratelimiter"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"

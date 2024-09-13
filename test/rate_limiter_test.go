@@ -9,9 +9,10 @@ import (
 	"sync"
 	"testing"
 	"time"
-	"web-metric/api"
-	"web-metric/api/middleware"
-	"web-metric/service/ratelimiter"
+
+	"github.com/Mohamadreza-shad/ratelimiter/api"
+	"github.com/Mohamadreza-shad/ratelimiter/api/middleware"
+	"github.com/Mohamadreza-shad/ratelimiter/service/ratelimiter"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -132,5 +133,5 @@ func Test_5ConcurrentReques_ThenWaitForWindowToClose_ThenCallAgain_WeShouldGet20
 	time.Sleep(4 * time.Second) //wait for window time to pass and try again. next request shoul get 200 instead of 429
 	res, err := http.DefaultClient.Do(req)
 	assert.Nil(err)
-	assert.Equal(int(res.StatusCode),int(200))
+	assert.Equal(int(res.StatusCode), int(200))
 }

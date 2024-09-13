@@ -1,4 +1,4 @@
-module web-metric
+module github.com/Mohamadreza-shad/ratelimiter
 
 go 1.22.1
 

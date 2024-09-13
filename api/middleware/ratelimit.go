@@ -2,8 +2,9 @@ package middleware
 
 import (
 	"net/http"
-	"web-metric/config"
-	"web-metric/service/ratelimiter"
+
+	"github.com/Mohamadreza-shad/ratelimiter/config"
+	"github.com/Mohamadreza-shad/ratelimiter/service/ratelimiter"
 
 	"github.com/gin-gonic/gin"
 )

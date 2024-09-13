@@ -3,9 +3,10 @@ package test
 import (
 	"os"
 	"testing"
-	"web-metric/client"
-	"web-metric/config"
-	"web-metric/logger"
+
+	"github.com/Mohamadreza-shad/ratelimiter/client"
+	"github.com/Mohamadreza-shad/ratelimiter/config"
+	"github.com/Mohamadreza-shad/ratelimiter/logger"
 
 	"github.com/redis/go-redis/v9"
 )

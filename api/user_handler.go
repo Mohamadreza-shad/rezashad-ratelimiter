@@ -3,7 +3,8 @@ package api
 import (
 	"fmt"
 	"net/http"
-	"web-metric/service/ratelimiter"
+
+	"github.com/Mohamadreza-shad/ratelimiter/service/ratelimiter"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

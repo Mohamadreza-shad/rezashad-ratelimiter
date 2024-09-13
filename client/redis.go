@@ -1,7 +1,7 @@
 package client
 
 import (
-	"web-metric/config"
+	"github.com/Mohamadreza-shad/ratelimiter/config"
 
 	"github.com/redis/go-redis/v9"
 )

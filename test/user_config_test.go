@@ -9,8 +9,9 @@ import (
 	"net/http/httptest"
 	"testing"
 	"time"
-	"web-metric/api"
-	"web-metric/service/ratelimiter"
+
+	"github.com/Mohamadreza-shad/ratelimiter/api"
+	"github.com/Mohamadreza-shad/ratelimiter/service/ratelimiter"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

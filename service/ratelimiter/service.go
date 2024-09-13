@@ -4,8 +4,9 @@ import (
 	"context"
 	"errors"
 	"time"
-	"web-metric/config"
-	"web-metric/logger"
+
+	"github.com/Mohamadreza-shad/ratelimiter/config"
+	"github.com/Mohamadreza-shad/ratelimiter/logger"
 
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap/zapcore"
@@ -21,10 +22,10 @@ type Service struct {
 	logger      *logger.Logger
 }
 
-//The RateLimit method implements a rate-limiting mechanism using Redis. 
-//It limits the number of requests a user can make within a specified time window. 
-//The method ensures that requests beyond the defined limit are blocked, 
-//enforcing fair usage of the system's resources.
+// The RateLimit method implements a rate-limiting mechanism using Redis.
+// It limits the number of requests a user can make within a specified time window.
+// The method ensures that requests beyond the defined limit are blocked,
+// enforcing fair usage of the system's resources.
 func (s *Service) RateLimit(userID string, limit int) bool {
 	ctx := context.Background()
 
@@ -69,7 +70,7 @@ func (s *Service) RateLimit(userID string, limit int) bool {
 }
 
 // The SetUserConfig method allows the system to configure and set custom
-// rate limits for individual users in Redis. 
+// rate limits for individual users in Redis.
 // This method is typically used to update or create
 // user-specific rate limit configurations that override the default rate limit.
 func (s *Service) SetUserConfig(ctx context.Context, params SetUserConfigParams) error {
@@ -84,7 +85,6 @@ func (s *Service) SetUserConfig(ctx context.Context, params SetUserConfigParams)
 	}
 	return nil
 }
-
 
 func (s *Service) AllProducts(ctx context.Context) []Product {
 	return []Product{
